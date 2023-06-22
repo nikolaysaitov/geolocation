@@ -4,7 +4,7 @@ function Location() {
   const [location, setLocation] = useState("");
 
   const sendLocationToServer = (position) => {
-    const url = "http://127.0.0.1:8000/auth/users/me/";
+    const url = "https://pim.impermebel.ru/apiyhrth";
     fetch(url, {
       method: "POST",
       body: JSON.stringify({ location: position }),
