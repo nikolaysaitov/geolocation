@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
 
-function App() {
+function Location() {
+  const [location, setLocation] = useState("");
+
+  const sendLocationToServer = (position) => {
+    const url = "http://127.0.0.1:8000/auth/users/me/";
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify({ location: position }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error(error));
+  };
+
+  const getLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        const currentPosition = `${latitude}, ${longitude}`;
+        setLocation(currentPosition);
+        sendLocationToServer(currentPosition);
+      },
+      (error) => {
+        console.error(error.message);
+      },
+      { enableHighAccuracy: true, maximumAge: 30000, timeout: 27000 }
+    );
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      getLocation();
+    }, 3000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <p>Current Location: {location}</p>
     </div>
   );
 }
 
-export default App;
+export default Location;
